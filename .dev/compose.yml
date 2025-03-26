@@ -1,0 +1,57 @@
+
+
+services:
+  mssql:
+    container_name: sql-server
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    #image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "password_1234"
+    ports:
+      - 1433:1433
+    vvolumes:
+      - ./data:/var/opt/mssql/data
+      - ./3:/backup
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    volumes:
+      - ../backend:/backend
+    env_file:
+      - ../backend/.env
+    healthcheck: 
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - 5001:5000
+
+    networks:
+      - default
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+
+    healthcheck: 
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    volumes:
+      - ../frontend:/frontend
+    
+    networks:
+      - default
+
