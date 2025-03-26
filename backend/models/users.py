@@ -27,8 +27,6 @@ class User(Base):
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=sqlalchemy.func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=sqlalchemy.func.now(), onupdate=sqlalchemy.func.now())
 
-    
-
     def __repr__(self):
         return f'<User {self.email}>'
 

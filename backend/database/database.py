@@ -25,12 +25,12 @@ class Database:
         return Session()
     
 
-DATABASE_URL = f"mssql+pyodbc://sa:{os.getenv('SQL_PASSWORD')}@mssql:1433/master?driver=ODBC+Driver+17+for+SQL+Server"
+DATABASE_URL = f"mssql+pyodbc://{os.getenv('SQL_USER', 'sa')}:{os.getenv('SQL_PASSWORD', 'password_1234')}@mssql_container:1433/master?driver=ODBC+Driver+18+for+SQL+Server"
 
-
-database = Database(f"mssql+pyodbc://user:password@server/database")
+database = Database(DATABASE_URL)
 
 print(f"Database initialised: {database.url}")
+
 @contextmanager
 def get_db():
     Session = sessionmaker(bind=database.engine)
