@@ -1,0 +1,99 @@
+openapi: 3.0.4
+info:
+  title: Ikarus Weather App
+  description: |-
+   This contains all the endpoint for the weather app
+  termsOfService: https://swagger.io/terms/
+  contact:
+    email: matthaeusb@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.12
+  
+
+servers:
+  - url: https://localhost/api/
+
+paths:
+  /weather/:
+    post:
+      summary: Add a new weather entry
+      responses:
+        "200": 
+          description: "new entry created"
+        "401":
+          description: "you are not allowed to do this"
+          
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Weather"
+    get:
+      summary: Get all weather entries
+      responses:
+        "200":
+          description: "List of entries"
+        "401":
+          description: "yyou are not allowed to do this"
+  /weather/{entryId}/:
+    get:
+      summary: "Get an entry by id"
+      responses:
+        "200":
+          description: ""
+        "401": 
+          decription: ""
+        "404":
+          description: "entry does not exist"
+    put:
+      summary: "Update an existing entry"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Weather"
+      responses:
+        "200":
+          description: ""
+        "401": 
+          decription: ""
+        "404":
+          description: "entry does not exist"
+    delete:
+      summary: "Remove entry given by ID"
+      responses:
+        "200":
+          description: ""
+        "401": 
+          decription: ""
+        "404":
+          description: "entry does not exist"
+  
+  /user/login:
+    post:
+      summary: Login user with credentials
+      responses:
+        "200": 
+          description: ""
+        "401":
+          description: ""
+  /user/register:
+    post:
+      summary: Register user
+      responses:
+        "200": 
+          description: ""
+        "400":
+          description: "user already there"
+  
+components:
+  schemas:
+    Weather:
+      type: object
+    User:
+      type: object
+      
