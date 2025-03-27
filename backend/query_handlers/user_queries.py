@@ -18,11 +18,11 @@ class UserQueries:
                 .scalars()
                 .one_or_none()
             )
+            print(user, flush=True)
             return user
         except OperationalError as e:
+            print(e, flush=True)
             raise NotFound("User not found")
-        # except SQLAlchemyError as e:
-        #     raise BadRequest(f"{e}")
 
     def get_user_by_id(self, user_id) -> User:
         try:

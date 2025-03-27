@@ -3,18 +3,24 @@
 services:
   mssql:
     # image: mcr.microsoft.com/mssql/server:2017-latest
-    image: mcr.microsoft.com/azure-sql-edge:latest
+    image: mcr.microsoft.com/azure-sql-edge:1.0.4
     container_name: mssql_container
     #image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
     restart: always
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "password_1234"
+      SA_PASSWORD: "Password_1234"
       MSSQL_PID: "Developer"
+      MSSQL_TCP_PORT: "1433"  
     ports:
       - 1433:1433
     volumes:
       - mssql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "password_1234", "-Q", "SELECT 1"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
     deploy:
       resources:
         limits:
@@ -35,7 +41,6 @@ services:
       retries: 5
     ports:
       - 5001:5000
-
     networks:
       - default
 

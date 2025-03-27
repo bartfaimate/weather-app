@@ -1,8 +1,9 @@
 import flask
 from routers.router import api
-
-
 import logging
+import os
+if os.getenv("DEBUG") == "1":
+    import debugpy 
 
 log = logging.getLogger(__file__)
 
@@ -21,7 +22,6 @@ def create_app():
 
     return app
 
-
 def page_not_found(e):
     return flask.jsonify({"message": "Page not found"}), 404
 
@@ -36,8 +36,10 @@ def unauthorized(e):
 
 
 if __name__ == '__main__':
-    app = create_app()
 
+    app = create_app()
+    if os.getenv("DEBUG") == "1":
+        debugpy.listen(("localhost", 6667))
     app.register_error_handler(400 , bad_request)
     app.register_error_handler(401, unauthorized)
     app.register_error_handler(404, page_not_found)
