@@ -39,14 +39,21 @@ def get_weather_data(weather_id:str):
 
 def create_weather_data():
     data = request.json
-
-    return jsonify()
+    with get_db() as db:
+        entry = WeatherQueries(db).create_weather_data(**data)
+        return jsonify(entry.to_dict())
 
 def update_weather_data(weather_id:str):
-    return jsonify()
+    data = request.json
+    with get_db() as db:
+        entry = WeatherQueries(db).update_weather_data(weather_id=weather_id, **data)
+        return jsonify(entry.to_dict())
 
 def delete_weather_data(weather_id:str):
-    return jsonify()
+     with get_db() as db:
+        WeatherQueries(db).delete_weather_data(weather_id=weather_id)
+        return jsonify("ok")
+
 
 
 @api.post('/user/register/')
