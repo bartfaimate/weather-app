@@ -9,7 +9,6 @@ from sqlalchemy.exc import OperationalError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import delete, select
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
-from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class WeatherQueries:
@@ -34,16 +33,19 @@ class WeatherQueries:
     def create_weather_data(
         self,
         temperature: float,
-        sky_overcast: OVERCAST_TYPE,
+        humidity: float,
+        location: str,
         timestamp: datetime | None = None,
         **kwargs,
     ) -> WeatherData:
+        
         temperature and validate_temperature(temperature)
-        sky_overcast and validate_overcast(sky_overcast)
+        humidity and validate_humidity(humidity)
 
         entry = WeatherData(
             temperature=temperature,
-            sky_overcast=sky_overcast,
+            humidity=humidity,
+            location=location,
             timestamp=timestamp or datetime.now(),
         )
         self.db.add(entry)
@@ -55,16 +57,16 @@ class WeatherQueries:
         self,
         weather_id: str,
         temperature: float | None = None,
-        sky_overcast: OVERCAST_TYPE | None = None,
+        humidity: float | None = None,
         timestamp: datetime | None = None,
         **kwargs,
     ) -> WeatherData:
         temperature and validate_temperature(temperature)
-        sky_overcast and validate_overcast(sky_overcast)
+        humidity and validate_humidity(humidity)
 
         entry = self.get_weather_by_id(weather_id)
         entry.timestamp = timestamp or entry.timestamp
-        entry.sky_overcast = sky_overcast or entry.sky_overcast
+        entry.humidity = humidity or entry.sky_overcast
         entry.temperature = temperature or entry.temperature
         self.db.commit()
         return entry
@@ -74,16 +76,16 @@ class WeatherQueries:
 
 
 def validate_args(**kwargs):
-    required = {"sky_overcast", "temperature"}
+    required = {"humidity", "temperature", "location"}
     if required.intersection(set(kwargs)) != required:
         raise BadRequest(f" {list(required)} should be in the body")
 
 
 def validate_temperature(temperature):
-    if temperature < -80 or temperature > 80:
+    if  not isinstance(temperature, (float, int)) or temperature < -80 or temperature > 80:
         raise BadRequest("'temperature' is in Celsius, it should be between -80 and 80")
 
 
-def validate_overcast(sky_overcast):
-    if sky_overcast not in list(OVERCAST_TYPE.__args__):
-        raise BadRequest(f"'sky_overcast' should be in {list(OVERCAST_TYPE.__args__)}")
+def validate_humidity(humidity):
+    if not isinstance(humidity, (float, int)) or humidity < 0 or humidity > 100:
+        raise BadRequest("'humidity' should be between 0 and 100")

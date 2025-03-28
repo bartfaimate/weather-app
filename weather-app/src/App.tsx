@@ -6,6 +6,7 @@ import './App.css'
 
 import { Login } from './view/Login'
 import { Menu } from './modules/menu'
+import { Register } from './view/register'
 import { Block } from "baseui/block";
 import { Button } from "baseui/button";
 import { Grid, Cell } from 'baseui/layout-grid'
@@ -35,8 +36,8 @@ function App() {
           <Routes>
             <Route path="/" element={<WeatherOverview isLoggedIn={isLoggedIn} />} />
 
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Login/>}/>
+            <Route path="/login" element={<Login setLoginCb={setLoggedIn}/>}/>
+            <Route path="/register" element={<Register/>}/>
             
           </Routes>
 

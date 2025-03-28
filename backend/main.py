@@ -20,6 +20,7 @@ def create_app():
         Jwt.save_key_to_file(key)
     except OSError as e:
         log.warning(e)
+    database.drop_all()
     database.create_all()
     return app
 

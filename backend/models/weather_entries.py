@@ -20,19 +20,17 @@ class WeatherData(Base):
 
     id : Mapped[str] = mapped_column(String(36), default=lambda: str(uuid4()), primary_key=True)
     temperature: Mapped[float] = mapped_column(Float, nullable=True) # celsius
-    sky_overcast: Mapped[OVERCAST_TYPE] = mapped_column(String(64), default="N/A")
     humidity: Mapped[float] = mapped_column(Float, nullable=True) # percentage
     location: Mapped[str] = mapped_column(String(128))
     timestamp: Mapped[datetime] = mapped_column(DateTime, server_default=sqlalchemy.func.now())
 
     def __repr__(self):
-        return f'<WeatherData {self.temperature} {self.sky_overcast}>'
+        return f'<WeatherData {self.temperature} {self.humidity} {self.location}>'
 
     def to_dict(self):
         return {
             "id": self.id,
             "temperature": self.temperature,
-            "sky_overcast": self.sky_overcast,
             "timestamp": self.timestamp,
             "location": self.location,
             "humidity": self.humidity,

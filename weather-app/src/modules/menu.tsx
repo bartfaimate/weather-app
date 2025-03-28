@@ -10,17 +10,11 @@ import { AppNavBar, setItemActive, NavItem } from "baseui/app-nav-bar";
 export const Menu = () => {
     const [css] = useStyletron();
     const [mainItems, setMainItems] = React.useState<NavItem[]>([
-        { icon: Upload, label: "Home" },
-        { icon: Upload, label: "Primary B" },
-
-
+        { label: "Home" , href: "/"},
+        {  label: "Login" },
+        {  label: "Register" },
     ]);
-    const userItems = [
-        { icon: Overflow, label: "Account item1" },
-        { icon: Overflow, label: "Account item2" },
-        { icon: Overflow, label: "Account item3" },
-        { icon: Overflow, label: "Account item4" },
-    ];
+
 
 
     function handleMainItemSelect(item: NavItem) {

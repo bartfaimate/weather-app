@@ -16,7 +16,7 @@ from query_handlers.weather_queries import WeatherQueries, validate_args
 
 api = Blueprint('app', __name__, url_prefix='/api/')
 
-CORS(api)
+CORS(api, methods=["get", "post", "delete", "put"])
 # CORS(api, resources={r"/ask": {"origins": "http://localhost:9090"}})
 
 @api.route('/')

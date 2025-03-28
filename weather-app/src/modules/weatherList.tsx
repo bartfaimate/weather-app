@@ -21,10 +21,10 @@ export const WeatherList = ({
                                 artwork={props => <Check {...props} />}
                                 shape={SHAPE.ROUND}
                                 endEnhancer={() => (
-                                    <ListItemLabel>{`${entry.temperature}°C ${entry.sky_overcast}`}</ListItemLabel>
+                                    <ListItemLabel>{`${entry.temperature}°C, ${entry.humidity}%`}</ListItemLabel>
                                 )}
                             >
-                                <ListItemLabel description={`${entry.temperature}°C ${entry.sky_overcast}`}> {entry.timestamp}</ListItemLabel>
+                                <ListItemLabel description={`${entry.location}`}> {entry.timestamp}</ListItemLabel>
                             </ListItem>
                         )
                     })
