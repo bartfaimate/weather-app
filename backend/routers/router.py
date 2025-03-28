@@ -12,7 +12,7 @@ from models.users import User
 from utils.jwt import Jwt
 from werkzeug.exceptions import BadRequest, InternalServerError
 from query_handlers.user_queries import UserQueries
-from query_handlers.weather_queries import WeatherQueries
+from query_handlers.weather_queries import WeatherQueries, validate_args
 
 api = Blueprint('app', __name__, url_prefix='/api/')
 
@@ -37,18 +37,22 @@ def get_weather_data(weather_id:str):
         entry = WeatherQueries(db).get_weather_by_id(weather_id)
         return jsonify(entry.to_dict())
 
+@api.post('/weather/')
 def create_weather_data():
     data = request.json
+    validate_args(**data)
     with get_db() as db:
         entry = WeatherQueries(db).create_weather_data(**data)
         return jsonify(entry.to_dict())
 
+@api.put('/weather/<string:weather_id>/')
 def update_weather_data(weather_id:str):
     data = request.json
     with get_db() as db:
         entry = WeatherQueries(db).update_weather_data(weather_id=weather_id, **data)
         return jsonify(entry.to_dict())
 
+@api.delete('/weather/<string:weather_id>/')
 def delete_weather_data(weather_id:str):
      with get_db() as db:
         WeatherQueries(db).delete_weather_data(weather_id=weather_id)
@@ -76,7 +80,7 @@ def register_user():
 def login_user():
     data = request.json
     required = {"email", "password"}
-    
+
     if required.intersection(set(data)) != required:
         raise BadRequest(f" {list(required)} fields must be in the body")
     

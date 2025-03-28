@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 
@@ -10,31 +10,42 @@ import { Block } from "baseui/block";
 import { Button } from "baseui/button";
 import { Grid, Cell } from 'baseui/layout-grid'
 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { WeatherOverview } from './view/weatherOverview'
 
+import { WeatherList } from './modules/weatherList'
+
+import axios from 'axios'
 
 function App() {
 
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+
   return (
     <>
-      
-    <Grid>
-      <Cell span={12}>
-        <Menu></Menu>
-      </Cell>
+    <Router>
 
-      <Cell span={12}>
-        <Grid>
-          <Cell>Mon</Cell>
-          <Cell>Tue</Cell>
-          <Cell>Wed</Cell>
-          <Cell>Thu</Cell>
+      <Grid>
+        <Cell span={12}>
+          <Menu></Menu>
+        </Cell>
+
+        <Cell span={12}>
+          <Routes>
+            <Route path="/" element={<WeatherOverview isLoggedIn={isLoggedIn} />} />
+
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Login/>}/>
+            
+          </Routes>
 
 
-        </Grid>
-      </Cell>
+        </Cell>
 
-    </Grid>
-      
+      </Grid>
+    </Router>
+
     </>
   );
 

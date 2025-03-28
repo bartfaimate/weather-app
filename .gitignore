@@ -3,3 +3,4 @@ node_modules/**
 **pycache**
 backend/weather/
 backend/.env
+.dev/data/**

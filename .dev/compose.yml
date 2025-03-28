@@ -44,9 +44,9 @@ services:
     networks:
       - default
 
-  frontend:
+  weather-app:
     build:
-      context: ../frontend
+      context: ../weather-app
       dockerfile: Dockerfile
 
     healthcheck: 
@@ -56,7 +56,7 @@ services:
       retries: 5
 
     volumes:
-      - ../frontend:/frontend
+      - ../weather-app:/weather-app
     
     networks:
       - default

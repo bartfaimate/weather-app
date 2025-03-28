@@ -10,11 +10,12 @@ class Database:
         self.engine = create_engine(database_url)
 
     def create_all(self):
-        from backend.models.base import Base
+        from models.base import Base
+        print("Creating tables", flush=True)
         Base.metadata.create_all(self.engine)
 
     def drop_all(self):
-        from backend.models.base import Base
+        from models.base import Base
         Base.metadata.drop_all(self.engine)
 
     def get_engine(self):
@@ -25,7 +26,7 @@ class Database:
         return Session()
     
 
-DATABASE_URL = f"mssql+pyodbc://{os.getenv('SQL_USER', 'sa')}:{os.getenv('SQL_PASSWORD', 'Password_1234')}@mssql_container:1433/master?driver=ODBC+Driver+18+for+SQL+Server"
+DATABASE_URL = f"mssql+pyodbc://{os.getenv('SQL_USER', 'sa')}:{os.getenv('SQL_PASSWORD', 'Password_1234')}@mssql_container:1433/master?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
 
 database = Database(DATABASE_URL)
 

@@ -2,6 +2,7 @@ import flask
 from routers.router import api
 import logging
 import os
+from database.database import database
 if os.getenv("DEBUG") == "1":
     import debugpy 
 
@@ -19,7 +20,7 @@ def create_app():
         Jwt.save_key_to_file(key)
     except OSError as e:
         log.warning(e)
-
+    database.create_all()
     return app
 
 def page_not_found(e):
@@ -38,8 +39,9 @@ def unauthorized(e):
 if __name__ == '__main__':
 
     app = create_app()
-    if os.getenv("DEBUG") == "1":
-        debugpy.listen(("localhost", 6667))
+
+    # if os.getenv("DEBUG") == "1":
+    #     debugpy.listen(("localhost", 6789))
     app.register_error_handler(400 , bad_request)
     app.register_error_handler(401, unauthorized)
     app.register_error_handler(404, page_not_found)
