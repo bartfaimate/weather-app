@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from models.types import OVERCAST_TYPE
-from models.users import User
 from models.weather_entries import WeatherData
-from sqlalchemy.exc import OperationalError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import delete, select
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
@@ -66,7 +63,7 @@ class WeatherQueries:
 
         entry = self.get_weather_by_id(weather_id)
         entry.timestamp = timestamp or entry.timestamp
-        entry.humidity = humidity or entry.sky_overcast
+        entry.humidity = humidity or entry.humidity
         entry.temperature = temperature or entry.temperature
         self.db.commit()
         return entry

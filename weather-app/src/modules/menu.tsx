@@ -10,7 +10,7 @@ import { AppNavBar, setItemActive, NavItem } from "baseui/app-nav-bar";
 export const Menu = () => {
     const [css] = useStyletron();
     const [mainItems, setMainItems] = React.useState<NavItem[]>([
-        { label: "Home" , href: "/"},
+        { label: "Home" },
         {  label: "Login" },
         {  label: "Register" },
     ]);

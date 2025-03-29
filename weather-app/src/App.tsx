@@ -14,7 +14,7 @@ import { Grid, Cell } from 'baseui/layout-grid'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { WeatherOverview } from './view/weatherOverview'
 
-import { WeatherList } from './modules/weatherList'
+import { CookiesProvider } from 'react-cookie';
 
 import axios from 'axios'
 
@@ -25,27 +25,30 @@ function App() {
 
   return (
     <>
-    <Router>
+      <CookiesProvider defaultSetOptions={{ path: '/' }}>
 
-      <Grid>
-        <Cell span={12}>
-          <Menu></Menu>
-        </Cell>
+        <Router>
 
-        <Cell span={12}>
-          <Routes>
-            <Route path="/" element={<WeatherOverview isLoggedIn={isLoggedIn} />} />
+          <Grid>
+            <Cell span={12}>
+              <Menu></Menu>
+            </Cell>
 
-            <Route path="/login" element={<Login setLoginCb={setLoggedIn}/>}/>
-            <Route path="/register" element={<Register/>}/>
-            
-          </Routes>
+            <Cell span={12}>
+              <Routes>
+                <Route path="/" element={<WeatherOverview  />} />
+
+                <Route path="/login" element={<Login setLoginCb={setLoggedIn} />} />
+                <Route path="/register" element={<Register />} />
+
+              </Routes>
 
 
-        </Cell>
+            </Cell>
 
-      </Grid>
-    </Router>
+          </Grid>
+        </Router>
+      </CookiesProvider>
 
     </>
   );

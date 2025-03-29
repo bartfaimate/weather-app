@@ -13,11 +13,11 @@ from utils.jwt import Jwt
 from werkzeug.exceptions import BadRequest, InternalServerError
 from query_handlers.user_queries import UserQueries
 from query_handlers.weather_queries import WeatherQueries, validate_args
+from middleware.login_validator import login_required
 
 api = Blueprint('app', __name__, url_prefix='/api/')
 
-CORS(api, methods=["get", "post", "delete", "put"])
-# CORS(api, resources={r"/ask": {"origins": "http://localhost:9090"}})
+CORS(api, origins= "*",supports_credentials=True)
 
 @api.route('/')
 def index():
@@ -38,6 +38,7 @@ def get_weather_data(weather_id:str):
         return jsonify(entry.to_dict())
 
 @api.post('/weather/')
+@login_required
 def create_weather_data():
     data = request.json
     validate_args(**data)
@@ -46,6 +47,7 @@ def create_weather_data():
         return jsonify(entry.to_dict())
 
 @api.put('/weather/<string:weather_id>/')
+@login_required
 def update_weather_data(weather_id:str):
     data = request.json
     with get_db() as db:
@@ -53,6 +55,7 @@ def update_weather_data(weather_id:str):
         return jsonify(entry.to_dict())
 
 @api.delete('/weather/<string:weather_id>/')
+@login_required
 def delete_weather_data(weather_id:str):
      with get_db() as db:
         WeatherQueries(db).delete_weather_data(weather_id=weather_id)
@@ -76,7 +79,7 @@ def register_user():
         return jsonify(user.to_dict())
 
 
-@api.post('/user/login/')
+@api.route('/user/login/', methods=["POST"])
 def login_user():
     data = request.json
     required = {"email", "password"}
