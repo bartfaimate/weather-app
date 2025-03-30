@@ -17,19 +17,60 @@ import { Notification, KIND } from "baseui/notification";
 
 import { Button, KIND as ButtonKind } from "baseui/button";
 
-export const NewEntryModal = ({ isOpen, setOpenCb }) => {
+export const ModifyEntryModal = ({ isOpen, setOpenCb, entryId }) => {
   const [cookies, setCookie, removeCookie] = useCookies();
   const [temperature, setTemperature] = React.useState<number>();
   const [humidity, setHumidity] = React.useState<number>();
   const [location, setLocation] = React.useState<string>("");
   const [error, setError] = React.useState<string>("");
+  const [info, setInfo] = React.useState<string>("");
+
+  React.useEffect(() => {
+    setError("");
+    setInfo("");
+    getEntry();
+  }, [entryId, isOpen]);
 
   const jwt = cookies.jwt;
 
-  const createEntry = () => {
+  const getEntry = () => {
     axios
-      .post(
-        `http://localhost:5001/api/weather/`,
+      .get(`http://localhost:5001/api/weather/${entryId}/`)
+      .then((res) => {
+        setTemperature(res.data.temperature);
+        setHumidity(res.data.humidity);
+        setLocation(res.data.location);
+      })
+      .catch((error) => {
+        if (error.response?.data?.message)
+          setError(error.response.data.message);
+        else setError(error.message);
+      });
+  };
+
+  const deleteEntry = () => {
+    axios
+      .delete(`http://localhost:5001/api/weather/${entryId}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        setInfo("Entry removed");
+      })
+      .catch((error) => {
+        if (error.response?.data?.message)
+          setError(error.response.data.message);
+        else setError(error.message);
+      });
+  };
+
+  const updateEntry = () => {
+    axios
+      .put(
+        `http://localhost:5001/api/weather/${entryId}/`,
         {
           temperature: temperature,
           humidity: humidity,
@@ -45,6 +86,7 @@ export const NewEntryModal = ({ isOpen, setOpenCb }) => {
       )
       .then((res) => {
         console.log(res.data);
+        setInfo("Entry successfully updated");
       })
       .catch((error) => {
         console.error(error);
@@ -53,6 +95,7 @@ export const NewEntryModal = ({ isOpen, setOpenCb }) => {
         else setError(error.message);
       });
   };
+
   const close = () => {
     setOpenCb(false);
   };
@@ -67,9 +110,9 @@ export const NewEntryModal = ({ isOpen, setOpenCb }) => {
       size={SIZE.default}
       role={ROLE.dialog}
     >
-      <ModalHeader>Create entry</ModalHeader>
+      <ModalHeader>Modify entry {entryId}</ModalHeader>
       <ModalBody>
-        <FormControl label="Temperaturee">
+        <FormControl label="Temperature">
           <Input
             endEnhancer="°C"
             value={temperature}
@@ -104,12 +147,20 @@ export const NewEntryModal = ({ isOpen, setOpenCb }) => {
             {() => error}
           </Notification>
         )}
+        {info && (
+          <Notification kind={KIND.positive} closeable>
+            {() => info}
+          </Notification>
+        )}
       </ModalBody>
       <ModalFooter>
         <Button onClick={close} kind={ButtonKind.tertiary}>
           Cancel
         </Button>
-        <Button onClick={createEntry}>Create</Button>
+        <Button onClick={updateEntry}>Modify</Button>
+        <Button onClick={deleteEntry} kind={ButtonKind.secondary}>
+          Remove
+        </Button>
       </ModalFooter>
     </Modal>
   );

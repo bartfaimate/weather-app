@@ -14,7 +14,7 @@ export const Login = (setLoginCb) => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("")
-  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   const handleLogin = () => {
     axios.post(`http://localhost:5001/api/user/login/`, {

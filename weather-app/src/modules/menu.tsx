@@ -10,7 +10,7 @@ import { AppNavBar, setItemActive, NavItem } from "baseui/app-nav-bar";
 export const Menu = () => {
     const [css] = useStyletron();
     const [mainItems, setMainItems] = React.useState<NavItem[]>([
-        { label: "Home" },
+        { label: "Home", },
         {  label: "Login" },
         {  label: "Register" },
     ]);
@@ -26,7 +26,6 @@ export const Menu = () => {
             title="Weather-App"
             mainItems={mainItems}
             onMainItemSelect={handleMainItemSelect}
-            onUserItemSelect={(item) => console.log("user", item)}
         />
     );
 }

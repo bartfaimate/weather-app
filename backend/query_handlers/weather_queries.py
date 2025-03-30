@@ -56,6 +56,7 @@ class WeatherQueries:
         temperature: float | None = None,
         humidity: float | None = None,
         timestamp: datetime | None = None,
+        location: str | None = None,
         **kwargs,
     ) -> WeatherData:
         temperature and validate_temperature(temperature)
@@ -65,6 +66,7 @@ class WeatherQueries:
         entry.timestamp = timestamp or entry.timestamp
         entry.humidity = humidity or entry.humidity
         entry.temperature = temperature or entry.temperature
+        entry.location = location or entry.location
         self.db.commit()
         return entry
 

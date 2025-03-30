@@ -50,6 +50,7 @@ def create_weather_data():
 @login_required
 def update_weather_data(weather_id:str):
     data = request.json
+    
     with get_db() as db:
         entry = WeatherQueries(db).update_weather_data(weather_id=weather_id, **data)
         return jsonify(entry.to_dict())
