@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { Card, StyledBody, StyledAction } from "baseui/card";
-import { Button } from "baseui/button";
+import { Button, KIND as ButtonKind } from "baseui/button";
 import { Input } from 'baseui/input';
 import axios from 'axios';
 import { FormControl } from "baseui/form-control";
@@ -63,11 +63,11 @@ export const Login = (setLoginCb) => {
 
       </StyledBody>
       <StyledAction>
-        <Button onClick={handleLogin} overrides={{ BaseButton: { style: { width: "100%" } } }}>
+        <Button onClick={handleLogin}  >
           Login
         </Button>
 
-        <Button onClick={() => navigate("/register")} overrides={{ BaseButton: { style: { width: "100%" } } }}>
+        <Button onClick={() => navigate("/register")} kind={ButtonKind.secondary}>
           Go to register
         </Button>
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { Card, StyledBody, StyledAction } from "baseui/card";
-import { Button } from "baseui/button";
+import { Button, KIND as ButtonKind } from "baseui/button";
 import { Input } from 'baseui/input';
 import axios
   from 'axios';
@@ -62,10 +62,10 @@ export const Register = () => {
 
       </StyledBody>
       <StyledAction>
-        <Button onClick={handleRegister} overrides={{ BaseButton: { style: { width: "100%" } } }}>
+        <Button onClick={handleRegister}>
           Register
         </Button>
-        <Button onClick={() => navigate("/login")} overrides={{ BaseButton: { style: { width: "100%" } } }}>
+        <Button onClick={() => navigate("/login")} kind={ButtonKind.secondary}>
           Back to login
         </Button>
 
