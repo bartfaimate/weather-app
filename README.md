@@ -36,7 +36,7 @@ Frontend (weather-app) related files:
 * /src/modules -> react reusable components/modules
 
 ## Development:
-Development machine: Mac with apple silicon.
+Development machine was: Mac with apple silicon. (Should be platform independent)
 
 Docker is required
 
@@ -47,7 +47,10 @@ docker compose up --build -d mssql backend weather-app
 
 After services are up the frontend can be accessed on `http://localhost:8080`
 and the API under `http://localhost:5001`
+
 ## Testing:
+You can run unittests locally, but you have to install the backend/requirements.txt in a virtualenvironment.
+
 ```bash 
 cd backend
 pytest tests/
