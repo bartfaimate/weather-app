@@ -1,16 +1,24 @@
-import flask
-from routers.router import api
 import logging
 import os
+
+
+import flask
+import connexion
+from routers.router import api
 from database.database import database
+
 if os.getenv("DEBUG") == "1":
     import debugpy 
 
 log = logging.getLogger(__file__)
 
 def create_app():
-    app = flask.Flask(__name__)
-    app.register_blueprint(api)
+    app = connexion.FlaskApp(__name__, specification_dir="./")
+    app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)
+
+    flas_app = app.app
+    # app = flask.Flask(__name__)
+    flas_app.register_blueprint(api)
 
     log.info("Generating jwt key")
     from utils.jwt import Jwt
@@ -22,7 +30,7 @@ def create_app():
         log.warning(e)
     # database.drop_all()
     database.create_all()
-    return app
+    return flas_app
 
 def page_not_found(e):
     return flask.jsonify({"message": "Entry not found"}), 404

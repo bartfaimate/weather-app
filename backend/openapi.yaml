@@ -1,0 +1,237 @@
+openapi: 3.0.0
+info:
+  title: Weather App API
+  description: API for managing weather data and user authentication
+  version: 1.0.0
+servers:
+  - url: http://localhost:5001/api
+    description: Local development server
+paths:
+  /:
+    get:
+      summary: API root endpoint
+      responses:
+        '200':
+          description: Returns Hello world. Mostly for testing and healthcheck
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello world"
+  /weather/:
+    get:
+      summary: Get all weather data
+      responses:
+        '200':
+          description: Returns a list of weather data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Weather'
+    post:
+      summary: Create new weather data
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Weather'
+      responses:
+        '401':
+              description: Unauthorized
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Unauthorized"
+        '200':
+          description: Weather data created
+  /weather/{weather_id}/:
+    get:
+      summary: Get weather data by ID
+      parameters:
+        - name: weather_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry not found"
+        '200':
+          description: Returns weather data
+    put:
+      summary: Update weather data
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: weather_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Weather'
+      responses:
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry not found"
+        '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "Unauthorized"
+        '200':
+          description: Weather data updated
+    delete:
+      summary: Delete weather data
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: weather_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '401':
+              description: Unauthorized
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Unauthorized"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry not found"
+        '200':
+          description: Weather data deleted
+  /user/register/:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User registered successfully
+  /user/login/:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '401':
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User with this email does not exists" 
+        '200':
+          description: Login successful, returns a JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  id:
+                    type: string
+                  user_id: 
+                    type: string
+                  jwt:
+                    type: string
+                  JWT_CREATED_AT:
+                    type: integer
+  
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+    Weather:
+      type: object
+      properties:
+        id:
+          type: string
+        temperature:
+          type: number
+        humidity:
+          type: number
+        location:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
