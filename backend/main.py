@@ -10,13 +10,18 @@ from database.database import database
 if os.getenv("DEBUG") == "1":
     import debugpy 
 
+
 log = logging.getLogger(__file__)
+
 
 def create_app():
     app = connexion.FlaskApp(__name__, specification_dir="./")
     app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)
 
+
     flas_app = app.app
+    flas_app.url_map.strict_slashes = False
+
     # app = flask.Flask(__name__)
     flas_app.register_blueprint(api)
 
