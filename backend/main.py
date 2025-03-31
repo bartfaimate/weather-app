@@ -25,7 +25,7 @@ def create_app():
     return app
 
 def page_not_found(e):
-    return flask.jsonify({"message": "Page not found"}), 404
+    return flask.jsonify({"message": "Entry not found"}), 404
 
 def internal_server_error(e):
     return flask.jsonify({"message": f"Internal server error {e}"}), 500

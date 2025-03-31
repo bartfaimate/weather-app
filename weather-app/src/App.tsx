@@ -5,7 +5,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 import { Login } from './view/Login'
-import { Menu } from './modules/menu'
+import { Menu, HeaderMenu } from './modules/menu'
 import { Register } from './view/register'
 import { Block } from "baseui/block";
 import { Button } from "baseui/button";
@@ -31,7 +31,7 @@ function App() {
 
           <Grid>
             <Cell span={12}>
-              <Menu></Menu>
+              <HeaderMenu></HeaderMenu>
             </Cell>
 
             <Cell span={12}>

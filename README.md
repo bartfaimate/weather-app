@@ -25,6 +25,10 @@ Docker is required
 cd /path/to/weather-app
 docker compose up --build -d mssql backend weather-app
 ```
+## Testing:
+```bash 
+cd backend
+pytest tests/
 
 ## Deployement:
 

@@ -72,6 +72,8 @@ class WeatherQueries:
 
     def delete_weather_data(self, weather_id: str):
         self.db.execute(delete(WeatherData).where(WeatherData.id == weather_id))
+        self.db.commit()
+
 
 
 def validate_args(**kwargs):

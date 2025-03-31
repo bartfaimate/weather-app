@@ -38,7 +38,7 @@ def weather_queries(db_session):
     return WeatherQueries(db_session)
 
 def test_get_weather_all(weather_queries, db_session):
-    entry = WeatherData(id="1", temperature=25.0, humidity=50.0, location="Test City", timestamp=datetime.now())
+    entry = WeatherData(id="1", temperature=25.0, humidity=50.0, location="Test place", timestamp=datetime.now())
     db_session.add(entry)
     db_session.commit()
     
@@ -48,12 +48,12 @@ def test_get_weather_all(weather_queries, db_session):
 
 
 def test_get_weather_by_id(weather_queries, db_session):
-    entry = WeatherData(id="1", temperature=25.0, humidity=50.0, location="Test City", timestamp=datetime.now())
+    entry = WeatherData(id="1", temperature=25.0, humidity=50.0, location="Test place", timestamp=datetime.now())
     db_session.add(entry)
     db_session.commit()
     
     result = weather_queries.get_weather_by_id("1")
-    assert result.location == "Test City"
+    assert result.location == "Test place"
 
 
 def test_get_weather_by_id_not_found(weather_queries):
@@ -62,8 +62,8 @@ def test_get_weather_by_id_not_found(weather_queries):
 
 
 def test_create_weather_data(weather_queries, db_session):
-    entry = weather_queries.create_weather_data(temperature=20.0, humidity=40.0, location="New York")
-    assert entry.location == "New York"
+    entry = weather_queries.create_weather_data(temperature=20.0, humidity=40.0, location="Kitchen")
+    assert entry.location == "Kitchen"
     
     result = db_session.query(WeatherData).first()
     assert result is not None
@@ -71,7 +71,7 @@ def test_create_weather_data(weather_queries, db_session):
 
 
 def test_update_weather_data(weather_queries, db_session):
-    entry = WeatherData(id="1", temperature=22.0, humidity=55.0, location="Paris", timestamp=datetime.now())
+    entry = WeatherData(id="1", temperature=22.0, humidity=55.0, location="bed room", timestamp=datetime.now())
     db_session.add(entry)
     db_session.commit()
     
@@ -85,7 +85,7 @@ def test_update_weather_data_not_found(weather_queries):
 
 
 def test_delete_weather_data(weather_queries, db_session):
-    entry = WeatherData(id="1", temperature=15.0, humidity=60.0, location="London", timestamp=datetime.now())
+    entry = WeatherData(id="1", temperature=15.0, humidity=60.0, location="Kitchen", timestamp=datetime.now())
     db_session.add(entry)
     db_session.commit()
     

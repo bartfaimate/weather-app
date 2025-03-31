@@ -1,99 +1,237 @@
-openapi: 3.0.4
+openapi: 3.0.0
 info:
-  title: Ikarus Weather App
-  description: |-
-   This contains all the endpoint for the weather app
-  termsOfService: https://swagger.io/terms/
-  contact:
-    email: matthaeusb@gmail.com
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.12
-  
-
+  title: Weather App API
+  description: API for managing weather data and user authentication
+  version: 1.0.0
 servers:
-  - url: https://localhost/api/
-
+  - url: http://localhost:5001/api
+    description: Local development server
 paths:
+  /:
+    get:
+      summary: API root endpoint
+      responses:
+        '200':
+          description: Returns Hello world. Mostly for testing and healthcheck
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello world"
   /weather/:
-    post:
-      summary: Add a new weather entry
+    get:
+      summary: Get all weather data
       responses:
-        "200": 
-          description: "new entry created"
-        "401":
-          description: "you are not allowed to do this"
-          
+        '200':
+          description: Returns a list of weather data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Weather'
+    post:
+      summary: Create new weather data
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Weather"
-    get:
-      summary: Get all weather entries
+              $ref: '#/components/schemas/Weather'
       responses:
-        "200":
-          description: "List of entries"
-        "401":
-          description: "yyou are not allowed to do this"
-  /weather/{entryId}/:
+        '401':
+              description: Unauthorized
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Unauthorized"
+        '200':
+          description: Weather data created
+  /weather/{weather_id}/:
     get:
-      summary: "Get an entry by id"
+      summary: Get weather data by ID
+      parameters:
+        - name: weather_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
-          description: ""
-        "401": 
-          decription: ""
-        "404":
-          description: "entry does not exist"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry not found"
+        '200':
+          description: Returns weather data
     put:
-      summary: "Update an existing entry"
+      summary: Update weather data
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: weather_id
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Weather"
+              $ref: '#/components/schemas/Weather'
       responses:
-        "200":
-          description: ""
-        "401": 
-          decription: ""
-        "404":
-          description: "entry does not exist"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry not found"
+        '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "Unauthorized"
+        '200':
+          description: Weather data updated
     delete:
-      summary: "Remove entry given by ID"
+      summary: Delete weather data
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: weather_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
-          description: ""
-        "401": 
-          decription: ""
-        "404":
-          description: "entry does not exist"
-  
-  /user/login:
+        '401':
+              description: Unauthorized
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Unauthorized"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry not found"
+        '200':
+          description: Weather data deleted
+  /user/register/:
     post:
-      summary: Login user with credentials
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
       responses:
-        "200": 
-          description: ""
-        "401":
-          description: ""
-  /user/register:
+        '200':
+          description: User registered successfully
+  /user/login/:
     post:
-      summary: Register user
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
       responses:
-        "200": 
-          description: ""
-        "400":
-          description: "user already there"
+        '401':
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User with this email does not exists" 
+        '200':
+          description: Login successful, returns a JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  id:
+                    type: string
+                  user_id: 
+                    type: string
+                  jwt:
+                    type: string
+                  JWT_CREATED_AT:
+                    type: integer
   
 components:
   schemas:
-    Weather:
-      type: object
     User:
       type: object
-      
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+    Weather:
+      type: object
+      properties:
+        id:
+          type: string
+        temperature:
+          type: number
+        humidity:
+          type: number
+        location:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
