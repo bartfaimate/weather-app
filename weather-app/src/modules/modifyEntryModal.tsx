@@ -11,10 +11,9 @@ import {
 import { Input } from "baseui/input";
 import { FormControl } from "baseui/form-control";
 
-import { useCookies } from "react-cookie";
 import axios from "axios";
 import { Notification, KIND } from "baseui/notification";
-
+import { useCookies } from 'react-cookie';
 import { Button, KIND as ButtonKind } from "baseui/button";
 
 export const ModifyEntryModal = ({ isOpen, setOpenCb, entryId }) => {
@@ -25,6 +24,8 @@ export const ModifyEntryModal = ({ isOpen, setOpenCb, entryId }) => {
   const [error, setError] = React.useState<string>("");
   const [info, setInfo] = React.useState<string>("");
 
+  const isLoggedIn = cookies.loggedIn ?? false
+
   React.useEffect(() => {
     setError("");
     setInfo("");
@@ -32,6 +33,7 @@ export const ModifyEntryModal = ({ isOpen, setOpenCb, entryId }) => {
   }, [entryId, isOpen]);
 
   const jwt = cookies.jwt;
+  
 
   const getEntry = () => {
     axios
@@ -157,10 +159,8 @@ export const ModifyEntryModal = ({ isOpen, setOpenCb, entryId }) => {
         <Button onClick={close} kind={ButtonKind.tertiary}>
           Cancel
         </Button>
-        <Button onClick={updateEntry}>Modify</Button>
-        <Button onClick={deleteEntry} kind={ButtonKind.secondary}>
-          Remove
-        </Button>
+        { isLoggedIn && <Button onClick={updateEntry}>Modify</Button>}
+        {isLoggedIn && <Button onClick={deleteEntry} kind={ButtonKind.secondary}>Remove</Button>}
       </ModalFooter>
     </Modal>
   );
