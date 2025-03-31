@@ -16,6 +16,9 @@ There are 3 services running in a docker compose
 * backend (backend)
 * weather-app (frontend)
 
+Here is an image of the structure and usage: [image](weather-app-diagram.jpg)
+
+
 ## Development:
 Development machine: Mac with apple silicon.
 
@@ -25,6 +28,9 @@ Docker is required
 cd /path/to/weather-app
 docker compose up --build -d mssql backend weather-app
 ```
+
+After services are up the frontend can accessed on `http://localhost:8080`
+and the API under `http://localhost:5001`
 ## Testing:
 ```bash 
 cd backend
