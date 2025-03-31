@@ -23,7 +23,7 @@ export const Login = (setLoginCb) => {
     }, { headers: { "Content-Type": "application/json" }, withCredentials: true }
     )
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.jwt) {
           setCookie("loggedIn", true);
           setCookie("jwt", res.data.jwt);

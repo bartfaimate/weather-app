@@ -51,7 +51,6 @@ cd backend
 pytest tests/
 ```
 
-## Deployement:
 
 # Further development:
 * Enhance UI
@@ -59,3 +58,5 @@ pytest tests/
     * handle logout
 * API:
     * get a refresh token after each request
+* Add CI/CD pipeline. Run tests on push, automatic deployement
+* enable debugging for backend

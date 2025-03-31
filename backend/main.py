@@ -1,14 +1,13 @@
 import logging
 import os
 
-
 import flask
 import connexion
 from routers.router import api
 from database.database import database
 
-if os.getenv("DEBUG") == "1":
-    import debugpy 
+# if os.getenv("DEBUG") == "1":
+#     import debugpy 
 
 
 log = logging.getLogger(__file__)
@@ -33,6 +32,7 @@ def create_app():
         Jwt.save_key_to_file(key)
     except OSError as e:
         log.warning(e)
+    # TODO: if you need to recreate all tables
     # database.drop_all()
     database.create_all()
     return flas_app

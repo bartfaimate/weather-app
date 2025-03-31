@@ -10,7 +10,6 @@ from pathlib import Path
 import sys
 
 sys.path.append(Path(__file__).resolve().parents[1].as_posix())
-print(sys.path, flush=True)
 
 from models.weather_entries import WeatherData
 from query_handlers.weather_queries import WeatherQueries

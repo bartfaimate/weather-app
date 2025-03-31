@@ -18,7 +18,6 @@ class UserQueries:
                 .scalars()
                 .one_or_none()
             )
-            print(user, flush=True)
             return user
         except OperationalError as e:
             print(e, flush=True)

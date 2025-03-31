@@ -7,7 +7,6 @@ from pathlib import Path
 
 import sys
 sys.path.append(Path(__file__).resolve().parents[1].as_posix())
-print(sys.path, flush=True)
 
 from utils.jwt import Jwt  # Adjust import based on actual file structure
 

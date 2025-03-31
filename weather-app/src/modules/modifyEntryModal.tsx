@@ -87,7 +87,6 @@ export const ModifyEntryModal = ({ isOpen, setOpenCb, entryId }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setInfo("Entry successfully updated");
       })
       .catch((error) => {

@@ -20,7 +20,7 @@ export const WeatherOverview = () => {
     
         axios.get(`http://localhost:5001/api/weather/`)
           .then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             let sorted = res.data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
             setEntries(sorted)
             //  setEntries({ persons });
