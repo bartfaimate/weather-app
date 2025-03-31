@@ -29,6 +29,8 @@ The backend (Flask) related files are in the backend folder
 * /tests -> unit tests
 * /utils -> jwt creation and validation is located
 
+The API documentation can be found here: [openapi.yml](backend/openapi.yaml)
+
 Frontend (weather-app) related files:
 * /src/view -> contains react pages
 * /src/modules -> react reusable components/modules
